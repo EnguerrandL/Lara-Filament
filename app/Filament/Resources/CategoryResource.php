@@ -4,12 +4,16 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
+use App\Filament\Resources\CategoryResource\RelationManagers\PostsRelationManager;
 use App\Models\Category;
+use App\Models\Post;
+
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +24,7 @@ class CategoryResource extends Resource
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static ?string $modelLabel = 'Post categories';
 
     public static function form(Form $form): Form
     {
@@ -36,12 +41,17 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('slug'),
+             
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+
+              
+            
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -56,7 +66,7 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PostsRelationManager::class
         ];
     }
     
