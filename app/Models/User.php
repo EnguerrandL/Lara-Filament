@@ -3,12 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -43,12 +46,24 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function canAccessPanel(Panel $panel): bool
+    {
 
-    public function posts(){
+        if ($this->email === 'admin@admin.fr') {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    public function posts()
+    {
         return $this->belongsToMany(Post::class, 'post_user')->withPivot(['order'])->withTimestamps();
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->morphMany(Comment::class, 'commentable');
     }
 }
